@@ -24,6 +24,14 @@ class App extends Component {
   onSubmit = (e) => {
     e.preventDefault();
     console.log(this.state);
+
+    const data = {"answers":this.state.answers};
+
+    fetch("http://127.0.0.1:8000/get_response", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    }).then(response => response.json());
   }
 
   QAComponent = (question) => {
