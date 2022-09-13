@@ -1,34 +1,102 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import React, { Component } from 'react';
 
-function App() {
-  const [count, setCount] = useState(0)
+class App extends Component {  
+  constructor() {
+    super();
+    this.state = {
+      answers: []
+    };
+    this.onRadioChange = this.onRadioChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+  onRadioChange = (e) => {
+    this.setState(answers => {
+      answers = this.state.answers;
+      var questionName = e.target.name;
+      var breakIndex = questionName.indexOf('.');
+      var index = parseInt(questionName.substring(0, breakIndex));
+      answers[index - 1] = parseInt(e.target.value);
+      return {
+        answers
+      };
+    });
+  }
+  onSubmit = (e) => {
+    e.preventDefault();
+    console.log(this.state);
+  }
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+  QAComponent = (question) => {
+    return (<div>
+      <strong>{question}</strong><br></br>
+      <label>
+        <input
+          type="radio"
+          value="0"
+          name={question}
+          onChange={this.onRadioChange}
+        />
+        <span>Never</span>
+      </label>
+      <label>
+        <input
+          type="radio"
+          value="1"
+          name={question}
+          onChange={this.onRadioChange}
+        />
+        <span>Rarely</span>
+      </label>
+      <label>
+        <input
+          type="radio"
+          value="2"
+          name={question}
+          onChange={this.onRadioChange}
+        />
+        <span>Occassionally</span>
+      </label>
+      <label>
+        <input
+          type="radio"
+          value="3"
+          name={question}
+          onChange={this.onRadioChange}
+        />
+        <span>Frequently</span>
+      </label>
+      <label>
+        <input
+          type="radio"
+          value= "4"
+          name={question}
+          onChange={this.onRadioChange}
+        />
+        <span>Usually</span>
+      </label>
+    </div>);
+    
+  }
+
+  render() {
+    const numberOfQuestions = 7;
+    return (
+      <div className="App">
+        <form onSubmit={this.onSubmit}>
+          {this.QAComponent("1. Constant sadness/depressed mood")}<br></br>
+          {this.QAComponent("2. Difficulty falling asleep")}<br></br>
+          {this.QAComponent("3. Early morning awakening")}<br></br>
+          {this.QAComponent("4. Waking during the middle of the night")}<br></br>
+          {this.QAComponent("5. Increased sleep")}<br></br>
+          {this.QAComponent("6. Decreased enjoyment in formerly pleasurable activities")}<br></br>
+          {this.QAComponent("7. Feelings of guilt")}<br></br>
+          <button type="submit" disabled = {Object.keys(this.state.answers).length != numberOfQuestions}>Submit</button>
+        </form>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+    );
+  }
 }
 
-export default App
+
+
+export default App;
