@@ -25,12 +25,11 @@ class App extends Component {
     e.preventDefault();
     console.log(this.state);
 
-    const data = {"answers":this.state.answers};
-
     fetch("http://127.0.0.1:8000/get_response", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
+      headers: {Accept: "application/json",
+      "Content-Type": "application/json"},
+      body: JSON.stringify({"answers":this.state.answers}),
     }).then(response => response.json());
   }
 
@@ -87,17 +86,22 @@ class App extends Component {
   }
 
   render() {
-    const numberOfQuestions = 7;
+    const questions = ["Constant sadness/depressed mood", 
+                 "Difficulty falling asleep",
+                 "Early morning awakening",
+                 "Waking during the middle of the night",
+                 "Increased sleep",
+                 "Decreased enjoyment in formerly pleasurable activities",
+                 "Feelings of guilt"
+                ];
+    const numberOfQuestions = questions.length;
     return (
       <div className="App">
         <form onSubmit={this.onSubmit}>
-          {this.QAComponent("1. Constant sadness/depressed mood")}<br></br>
-          {this.QAComponent("2. Difficulty falling asleep")}<br></br>
-          {this.QAComponent("3. Early morning awakening")}<br></br>
-          {this.QAComponent("4. Waking during the middle of the night")}<br></br>
-          {this.QAComponent("5. Increased sleep")}<br></br>
-          {this.QAComponent("6. Decreased enjoyment in formerly pleasurable activities")}<br></br>
-          {this.QAComponent("7. Feelings of guilt")}<br></br>
+          {questions.map((q, i) => <div>
+            {this.QAComponent(`${i + 1}. ${q}`)}<br></br>
+          </div>)}
+          
           <button type="submit" disabled = {Object.keys(this.state.answers).length != numberOfQuestions}>Submit</button>
         </form>
       </div>
