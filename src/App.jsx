@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import jwt from "jwt-decode";
 import axios from "axios";
-import Select from 'react-select'
+import Select from "react-select";
 import { questions, choices, numberOfQuestions, arms } from "./constants.js";
+import "./App.css";
+import { Navbar, NavItem, Nav } from "react-bootstrap";
 
 class App extends Component {
   constructor() {
@@ -14,6 +16,8 @@ class App extends Component {
       questions: "",
       id: "",
       actual: "",
+      prediction: "",
+      total: 0,
     };
     this.onRadioChange = this.onRadioChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -51,9 +55,15 @@ class App extends Component {
     // get the headers and see if we have an auth token
     const token = this.getCookie("authToken");
     const msg = this.getCookie("message");
+    const total = this.getCookie("total");
     if (msg) {
       alert(msg);
     }
+
+    if (total) {
+      this.setState({total: total});
+    }
+
     this.setCookie("message", "");
 
     this.setState({ authToken: token, message: msg }, () => {
@@ -61,8 +71,8 @@ class App extends Component {
       if (this.state.authToken == token && this.state.authToken != "") {
         this.configureJWTExpiry(token);
         this.ValidationComponent();
-      };
-    }); 
+      }
+    });
   }
 
   setCookie = (cname, cvalue) => {
@@ -85,7 +95,6 @@ class App extends Component {
     });
   };
 
-
   handleInputChange = (newValue) => {
     console.log(newValue);
     this.setState({ actual: newValue.value });
@@ -99,6 +108,8 @@ class App extends Component {
     const response = await axios.post("http://localhost:8000/get_response", {
       answers: this.state.answers,
     });
+
+    this.setState({ prediction: response.data.message });
   };
 
   onValidationSubmit = async (e) => {
@@ -115,6 +126,7 @@ class App extends Component {
         alert(response.data.message);
       }
       if (response.data.message == "Submitted") {
+        localStorage.setItem('counter', parseInt(localStorage.getItem('counter')) + 1);
         location.reload();
       }
     }
@@ -164,6 +176,7 @@ class App extends Component {
     console.log(res.data);
 
     if (res.data.requestType == "CAS") {
+      localStorage.setItem("counter", 1);
       window.location.replace(res.data.redirect_url);
     }
   };
@@ -205,29 +218,64 @@ class App extends Component {
     }
   };
 
-  returnButton = (e) => {
+  returnButton = () => {
     if (!this.state.authToken != "") {
-      return <button onClick={this.login}>Login</button>;
+      return (
+        <button onClick={this.login} className="nav-button">
+          Admin Login
+        </button>
+      );
     } else {
-      return <button onClick={this.logout}>Logout</button>;
+      return (
+        <button onClick={this.logout} className="nav-button">
+          Logout
+        </button>
+      );
     }
+  };
+
+  navBar = () => {
+    return (
+      <nav className="navbar sticky-top navbar-expand-lg navbar-custom">
+        <a className="navbar-brand" href="/">
+          CARE Screening Form
+        </a>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+        </button>
+          <ul className="navbar-nav">
+            <li className="nav-item active">{this.returnButton()}</li>
+          </ul>
+      </nav>
+    );
   };
 
   QAComponent = (question, choices) => {
     return (
       <div>
-        <strong>{question}</strong>
+        <label className="questions">{question}</label>
         <br></br>
         {choices.map((q, i) => (
-          <label>
+          <div className="form-check form-check-inline">
             <input
-              type="radio"
-              value={String(i)}
-              name={question}
+              className="form-check-input"
               onChange={this.onRadioChange}
-            />
-            <span>{q}</span>
-          </label>
+              type="radio"
+              name={question}
+              id="inlineRadio1"
+              value={String(i)}
+            ></input>
+            <label className="form-check-label" htmlFor="inlineRadio1">
+              {q}
+            </label>
+          </div>
         ))}
       </div>
     );
@@ -235,66 +283,123 @@ class App extends Component {
 
   ValidationComponent = async () => {
     const response = await axios.post("http://localhost:8000/getNext", {
-        token: this.state.authToken,
-      });
+      token: this.state.authToken,
+    });
 
     var reply = await response.data;
-    if ('data' in reply) {
-      this.setState({questions: "", id: ""});
+    if ("data" in reply) {
+      this.setState({ questions: "", id: "" });
     } else {
       console.log(reply.questions);
-      this.setState({questions: reply.questions, id: reply.id, actual: arms[0]});
+      this.setState({
+        questions: reply.questions,
+        id: reply.id,
+        actual: arms[0],
+      });
     }
   };
 
-  valPage = () => {
+  colorGiver = (e) => {
+    switch(e) {
+      case 4: return 'green';
+      case 3: return 'yellowgreen';
+      case 2: return 'orange';
+      case 1: return 'darkgoldenrod';
+      case 0: return 'red';
+      default: return 'blue';
+    }
+  }
 
+  valPage = () => {
     if (this.state.questions) {
-      var answers = this.state.questions.split('');
-      console.log(answers);
-      console.log(arms);
-      const options = arms.map((a, i) => (
-                        {value: a, label: a}
-                      ))
-      return(
-        <form onSubmit={this.onValidationSubmit}>
+      var answers = this.state.questions.split("");
+      const options = arms.map((a, i) => ({ value: a, label: a }));
+      return (
+        <div className="homePageForm">
+          <h3>Case {localStorage.getItem('counter')} / {this.state.total}</h3><br></br>
+        <h3>Case Number {this.state.id}</h3><br></br>
+        <form onSubmit={this.onValidationSubmit} >
           {answers.map((a, i) => (
             <div>
-            {questions[i] + ": " + choices[parseInt(a)]}
-            <br></br>
+              {questions[i]}<br></br>
+              <p style= {{color: this.colorGiver(parseInt(a))}}>{choices[parseInt(a)]}</p>
             </div>
-          )) }
-          <Select defaultValue={options[0]} onChange={this.handleInputChange} options = {options}></Select>
-          <div>{this.state.actual}</div>
-          <button
-            type="submit"
-          >Submit</button>
+          ))}
+          <hr></hr>
+          <label>Your Recommendation: </label>
+          <Select className = "SelectList"
+            defaultValue={options[0]}
+            onChange={this.handleInputChange}
+            options={options}
+          ></Select>
+          <br></br>
+          <button type="submit">Submit</button>
+          <br></br>
+          <br></br>
         </form>
-      )
+        </div>
+      );
     } else {
-      return(<div>Nothing more to Validate</div>)
+      return <div className="homePageForm">Nothing more to Validate</div>;
     }
+  };
 
-    
+  homePageHelper = () => {
+    if (this.state.prediction) {
+      return (
+        <div>
+          <br></br>
+          Based on your last form submission this resources might be helpful:{" "}
+          {this.state.prediction}
+          <br></br>
+          <a href="https://mentalhealth.gatech.edu/about/scheduling-appointment">Click here if you still would like to see CARE.</a>
+
+        </div>
+      );
+    } else {
+      return;
+    }
   };
 
   homePage = () => {
     return (
-      <form onSubmit={this.onSubmit}>
-        {questions.map((q, i) => (
-          <div>
-            {this.QAComponent(`${i + 1}. ${q}`, choices)}
-            <br></br>
-          </div>
-        ))}
+      <div className="homePageForm">
+        <h5>
+          GT offers several health initiatives to serve its students. The
+          purpose of this questionnaire is to help determine the services that
+          may best cater to your needs based on your responses.
+        </h5>
+        <br></br>
+        <h4>This form should not be used as a diagnosis tool. Its purpose is to
+          give personalized resources based on responses. No identifying information
+          is collected on the form.
+        </h4>
+        <br>
+        </br>
+        <h5>
+          Please answer the following questions:
+        </h5>
+        <br>
+        </br>
+        <form onSubmit={this.onSubmit}>
+          {questions.map((q, i) => (
+            <div>
+              {this.QAComponent(`${i + 1}. ${q}`, choices)}
+              <br></br>
+            </div>
+          ))}
 
-        <button
-          type="submit"
-          disabled={Object.keys(this.state.answers).length != numberOfQuestions}
-        >
-          Submit
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={
+              Object.keys(this.state.answers).length != numberOfQuestions
+            }
+          >
+            Submit
+          </button>
+        </form>
+        {this.homePageHelper()}
+      </div>
     );
   };
 
@@ -305,13 +410,16 @@ class App extends Component {
       default:
         return this.valPage();
     }
-  }
+  };
 
   render() {
     return (
       <div className="App">
-        {this.returnButton()}
+        {this.navBar()}
         {this.renderSwitch()}
+        <br></br><br></br><br></br><br></br>
+        <nav className="navbar fixed-bottom navbar-GTblue">
+        </nav>
       </div>
     );
   }
