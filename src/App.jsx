@@ -105,7 +105,7 @@ class App extends Component {
     e.preventDefault();
     console.log(this.state);
 
-    const response = await axios.post("http://localhost:8000/get_response", {
+    const response = await axios.post("https://sd-be.herokuapp.com/get_response", {
       answers: this.state.answers,
     });
 
@@ -117,7 +117,7 @@ class App extends Component {
     console.log(this.state);
 
     if (confirm("Submit Resources: " + this.state.actual)) {
-      const response = await axios.post("http://localhost:8000/updateForm", {
+      const response = await axios.post("https://sd-be.herokuapp.com/updateForm", {
         id: this.state.id,
         token: this.state.authToken,
         actual: this.state.actual,
@@ -282,7 +282,7 @@ class App extends Component {
   };
 
   ValidationComponent = async () => {
-    const response = await axios.post("http://localhost:8000/getNext", {
+    const response = await axios.post("https://sd-be.herokuapp.com/getNext", {
       token: this.state.authToken,
     });
 
