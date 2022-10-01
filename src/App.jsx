@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import jwt from "jwt-decode";
 import axios from "axios";
-import Select from "react-select";
 import { questions, choices, numberOfQuestions, arms } from "./constants.js";
 import "./App.css";
-import { Navbar, NavItem, Nav } from "react-bootstrap";
 
 class App extends Component {
   constructor() {
@@ -238,7 +236,7 @@ class App extends Component {
     return (
       <nav className="navbar sticky-top navbar-expand-lg navbar-custom">
         <a className="navbar-brand" href="/">
-          Get the Right Help Pre-Screening Form
+          Get the Right Help Form
         </a>
         <button
           className="navbar-toggler"
@@ -271,6 +269,7 @@ class App extends Component {
               name={question}
               id="inlineRadio1"
               value={String(i)}
+              style={{"height":48, "width":48}}
             ></input>
             <label className="form-check-label" htmlFor="inlineRadio1">
               {q}
