@@ -133,7 +133,7 @@ class App extends Component {
   };
 
   refreshToken = async () => {
-    var link = "http://127.0.0.1:8000/refreshToken";
+    var link = "https://sd-be.herokuapp.com/refreshToken";
 
     let res;
     try {
@@ -167,7 +167,7 @@ class App extends Component {
     headersGiven.set("Accept", "application/json");
     headersGiven.set("Content-Type", "application/json");
 
-    var link = "http://127.0.0.1:8000/login";
+    var link = "https://sd-be.herokuapp.com/login";
 
     const res = await axios.get(link);
     const respHeaders = res.headers;
@@ -186,7 +186,7 @@ class App extends Component {
     headersGiven.set("Accept", "application/json");
     headersGiven.set("Content-Type", "application/json");
 
-    var link = "http://127.0.0.1:8000/logout";
+    var link = "https://sd-be.herokuapp.com/logout";
 
     const res = await axios.get(link);
     const respHeaders = res.headers;
@@ -204,7 +204,7 @@ class App extends Component {
     headersGiven.set("Accept", "application/json");
     headersGiven.set("Content-Type", "application/json");
 
-    var link = `http://127.0.0.1:8000/${e.target.innerHTML.toLowerCase()}`;
+    var link = `https://sd-be.herokuapp.com/${e.target.innerHTML.toLowerCase()}`;
     console.log(link);
 
     const res = await axios.get(link);
