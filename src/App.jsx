@@ -236,7 +236,7 @@ class App extends Component {
     return (
       <nav className="navbar sticky-top navbar-expand-lg navbar-custom">
         <a className="navbar-brand" href="/">
-          Get the Right Help Form
+          Get The Right Help Form
         </a>
         <button
           className="navbar-toggler"
