@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import jwt from "jwt-decode";
 import axios from "axios";
+import Select from "react-select";
 import { questions, choices, numberOfQuestions, arms } from "./constants.js";
 import "./App.css";
-
+import { Navbar, NavItem, Nav } from "react-bootstrap";
+axios.defaults.baseURL = 'http://localhost:8000';
 class App extends Component {
   constructor() {
     super();
@@ -51,6 +53,7 @@ class App extends Component {
 
   componentDidMount() {
     // get the headers and see if we have an auth token
+    console.log(this.getCookie("authToken"));
     const token = this.getCookie("authToken");
     const msg = this.getCookie("message");
     const total = this.getCookie("total");
@@ -103,7 +106,7 @@ class App extends Component {
     e.preventDefault();
     console.log(this.state);
 
-    const response = await axios.post("https://sd-be.herokuapp.com/get_response", {
+    const response = await axios.post("/get_response", {
       answers: this.state.answers,
     });
 
@@ -115,7 +118,7 @@ class App extends Component {
     console.log(this.state);
 
     if (confirm("Submit Resources: " + this.state.actual)) {
-      const response = await axios.post("https://sd-be.herokuapp.com/updateForm", {
+      const response = await axios.post("/updateForm", {
         id: this.state.id,
         token: this.state.authToken,
         actual: this.state.actual,
@@ -131,7 +134,7 @@ class App extends Component {
   };
 
   refreshToken = async () => {
-    var link = "https://sd-be.herokuapp.com/refreshToken";
+    var link = "/refreshToken";
 
     let res;
     try {
@@ -165,7 +168,7 @@ class App extends Component {
     headersGiven.set("Accept", "application/json");
     headersGiven.set("Content-Type", "application/json");
 
-    var link = "https://sd-be.herokuapp.com/login";
+    var link = "/login";
 
     const res = await axios.get(link);
     const respHeaders = res.headers;
@@ -184,7 +187,7 @@ class App extends Component {
     headersGiven.set("Accept", "application/json");
     headersGiven.set("Content-Type", "application/json");
 
-    var link = "https://sd-be.herokuapp.com/logout";
+    var link = "/logout";
 
     const res = await axios.get(link);
     const respHeaders = res.headers;
@@ -202,7 +205,7 @@ class App extends Component {
     headersGiven.set("Accept", "application/json");
     headersGiven.set("Content-Type", "application/json");
 
-    var link = `https://sd-be.herokuapp.com/${e.target.innerHTML.toLowerCase()}`;
+    var link = `/${e.target.innerHTML.toLowerCase()}`;
     console.log(link);
 
     const res = await axios.get(link);
@@ -236,7 +239,7 @@ class App extends Component {
     return (
       <nav className="navbar sticky-top navbar-expand-lg navbar-custom">
         <a className="navbar-brand" href="/">
-          Get The Right Help Form
+          Get the Right Help
         </a>
         <button
           className="navbar-toggler"
@@ -281,7 +284,7 @@ class App extends Component {
   };
 
   ValidationComponent = async () => {
-    const response = await axios.post("https://sd-be.herokuapp.com/getNext", {
+    const response = await axios.post("/getNext", {
       token: this.state.authToken,
     });
 
@@ -416,7 +419,7 @@ class App extends Component {
       <div className="App">
         {this.navBar()}
         {this.renderSwitch()}
-        <br></br><br></br><br></br><br></br>
+        <br></br><br></br><br></br><br></br><br></br>
         <nav className="navbar fixed-bottom navbar-GTblue">
         </nav>
       </div>
