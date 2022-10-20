@@ -5,7 +5,7 @@ import Select from "react-select";
 import { questions, choices, numberOfQuestions, arms } from "./constants.js";
 import "./App.css";
 import { Navbar, NavItem, Nav } from "react-bootstrap";
-axios.defaults.baseURL = 'https://sd-be.herokuapp.com';
+axios.defaults.baseURL = 'http://sd-be.herokuapp.com';
 class App extends Component {
   constructor() {
     super();
@@ -80,7 +80,7 @@ class App extends Component {
     const d = new Date();
     d.setTime(d.getTime() + 16 * 60 * 1000);
     let expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";";
   };
 
   onRadioChange = (e) => {
