@@ -80,7 +80,7 @@ class App extends Component {
     const d = new Date();
     d.setTime(d.getTime() + 16 * 60 * 1000);
     let expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";";
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";domain=.mental-health-sd.com";
   };
 
   onRadioChange = (e) => {
