@@ -5,7 +5,7 @@ import Select from "react-select";
 import { questions, choices, numberOfQuestions, arms } from "./constants.js";
 import "./App.css";
 import { Navbar, NavItem, Nav } from "react-bootstrap";
-axios.defaults.baseURL = 'https://sd-be.herokuapp.com';
+axios.defaults.baseURL = 'http://mental-health-sd.com';
 class App extends Component {
   constructor() {
     super();
