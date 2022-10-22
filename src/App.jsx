@@ -189,7 +189,9 @@ class App extends Component {
 
     var link = "/logout";
 
-    const res = await axios.get(link);
+    const res = await axios.post(link, {
+      token: this.state.authToken,
+    });
     const respHeaders = res.headers;
 
     console.log(respHeaders);
