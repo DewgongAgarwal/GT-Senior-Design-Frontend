@@ -5,8 +5,8 @@ import Select from "react-select";
 import { questions, choices, numberOfQuestions, arms } from "./constants.js";
 import "./App.css";
 import { Navbar, NavItem, Nav } from "react-bootstrap";
-axios.defaults.baseURL = 'https://www.mental-health-sd.com';
-// axios.defaults.baseURL = 'http://localhost:8000';
+// axios.defaults.baseURL = 'https://www.mental-health-sd.com';
+axios.defaults.baseURL = 'http://localhost:8000';
 class App extends Component {
   constructor() {
     super();
@@ -48,13 +48,12 @@ class App extends Component {
     } else {
       const interval = setInterval(() => {
         this.refreshToken();
-      }, expirationTime - Date.now() - 30);
+      }, expirationTime - Date.now() - 30000);
     }
   }
 
   componentDidMount() {
     // get the headers and see if we have an auth token
-    console.log(this.getCookie("authToken"));
     const token = this.getCookie("authToken");
     const msg = this.getCookie("message");
     const total = this.getCookie("total");
@@ -81,8 +80,8 @@ class App extends Component {
     const d = new Date();
     d.setTime(d.getTime() + 16 * 60 * 1000);
     let expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";domain=.mental-health-sd.com";
-    // document.cookie = cname + "=" + cvalue + ";" + expires;
+    // document.cookie = cname + "=" + cvalue + ";" + expires + ";domain=.mental-health-sd.com";
+    document.cookie = cname + "=" + cvalue + ";" + expires;
   };
 
   onRadioChange = (e) => {
@@ -99,14 +98,12 @@ class App extends Component {
   };
 
   handleInputChange = (newValue) => {
-    console.log(newValue);
     this.setState({ actual: newValue.value });
     return newValue.value;
   };
 
   onSubmit = async (e) => {
     e.preventDefault();
-    console.log(this.state);
 
     const response = await axios.post("/get_response", {
       answers: this.state.answers,
@@ -117,7 +114,6 @@ class App extends Component {
 
   onValidationSubmit = async (e) => {
     e.preventDefault();
-    console.log(this.state);
 
     if (confirm("Submit Resources: " + this.state.actual)) {
       const response = await axios.post("/updateForm", {
@@ -140,7 +136,6 @@ class App extends Component {
 
     let res;
     try {
-      console.log(this.state.authToken);
       res = await axios.post(link, {
         token: this.state.authToken,
       });
@@ -153,7 +148,6 @@ class App extends Component {
       this.setState({ authToken: res.data.authToken });
       this.setCookie("authToken", res.data.authToken);
     }
-    console.log(this.state.authToken);
   };
 
   redirect = (url) => {
@@ -171,12 +165,10 @@ class App extends Component {
     headersGiven.set("Content-Type", "application/json");
 
     var link = "/login";
-
+    this.setState({ authToken: "" });
+    this.setCookie("authToken", "");
     const res = await axios.get(link);
     const respHeaders = res.headers;
-
-    console.log(respHeaders);
-    console.log(res.data);
 
     if (res.data.requestType == "CAS") {
       localStorage.setItem("counter", 1);
@@ -196,31 +188,9 @@ class App extends Component {
     });
     const respHeaders = res.headers;
 
-    console.log(respHeaders);
-    console.log(res.data);
-
     this.setState({ authToken: "" });
     this.setCookie("authToken", "");
     window.location.replace(res.data.redirect_url);
-  };
-
-  authentication = async (e) => {
-    const headersGiven = new Headers();
-    headersGiven.set("Accept", "application/json");
-    headersGiven.set("Content-Type", "application/json");
-
-    var link = `/${e.target.innerHTML.toLowerCase()}`;
-    console.log(link);
-
-    const res = await axios.get(link);
-    const respHeaders = res.headers;
-
-    console.log(respHeaders);
-    console.log(res.data);
-
-    if (res.data.requestType == "CAS") {
-      window.location.replace(res.data.redirect_url);
-    }
   };
 
   returnButton = () => {
@@ -274,11 +244,11 @@ class App extends Component {
               onChange={this.onRadioChange}
               type="radio"
               name={question}
-              id="inlineRadio1"
+              id= "inline"
               value={String(i)}
               style={{"height":48, "width":48}}
             ></input>
-            <label className="form-check-label" htmlFor="inlineRadio1">
+            <label className="form-check-label" htmlFor="inline">
               {q}
             </label>
           </div>
@@ -296,7 +266,6 @@ class App extends Component {
     if ("data" in reply) {
       this.setState({ questions: "", id: "" });
     } else {
-      console.log(reply.questions);
       this.setState({
         questions: reply.questions,
         id: reply.id,
