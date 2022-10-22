@@ -19,6 +19,7 @@ class App extends Component {
       actual: "",
       prediction: "",
       total: 0,
+      fetching: false,
     };
     this.onRadioChange = this.onRadioChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -105,11 +106,13 @@ class App extends Component {
   onSubmit = async (e) => {
     e.preventDefault();
 
+    this.setState({ fetching: true});
+    
     const response = await axios.post("/get_response", {
       answers: this.state.answers,
     });
 
-    this.setState({ prediction: response.data.message });
+    this.setState({ fetching: false, prediction: response.data.message });
   };
 
   onValidationSubmit = async (e) => {
@@ -367,11 +370,14 @@ class App extends Component {
           <button
             type="submit"
             disabled={
-              Object.keys(this.state.answers).length != numberOfQuestions
+              Object.keys(this.state.answers).length != numberOfQuestions ||
+              this.state.fetching
             }
           >
             Submit
           </button>
+          <div className="loading-spinner" style={{display: this.state.fetching ? 'block' : 'none'}}>
+          </div>
         </form>
         {this.homePageHelper()}
       </div>
