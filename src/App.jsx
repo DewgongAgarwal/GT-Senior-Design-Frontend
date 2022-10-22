@@ -5,8 +5,8 @@ import Select from "react-select";
 import { questions, choices, numberOfQuestions, arms } from "./constants.js";
 import "./App.css";
 import { Navbar, NavItem, Nav } from "react-bootstrap";
-// axios.defaults.baseURL = 'https://www.mental-health-sd.com';
-axios.defaults.baseURL = 'http://localhost:8000';
+axios.defaults.baseURL = 'https://www.mental-health-sd.com';
+// axios.defaults.baseURL = 'http://localhost:8000';
 class App extends Component {
   constructor() {
     super();
@@ -80,8 +80,8 @@ class App extends Component {
     const d = new Date();
     d.setTime(d.getTime() + 16 * 60 * 1000);
     let expires = "expires=" + d.toUTCString();
-    // document.cookie = cname + "=" + cvalue + ";" + expires + ";domain=.mental-health-sd.com";
-    document.cookie = cname + "=" + cvalue + ";" + expires;
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";domain=.mental-health-sd.com";
+    // document.cookie = cname + "=" + cvalue + ";" + expires;
   };
 
   onRadioChange = (e) => {
