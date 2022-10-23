@@ -365,7 +365,7 @@ class App extends Component {
           <br></br>
           Based on your last form submission this resources might be helpful:{" "}
           {this.state.prediction}
-          <br></br>
+          <br></br><br></br>
           {/* <a href="https://mentalhealth.gatech.edu/about/scheduling-appointment">
             Click here if you still would like to see CARE.
           </a> */}
@@ -373,7 +373,7 @@ class App extends Component {
             href="https://mentalhealth.gatech.edu/about/scheduling-appointment"
             style={{ color: "white" }}
           >
-            <button type="button" className="nav-button">
+            <button type="button" className="nav-button" style={{ width: "100%" }}>
               See CARE
             </button>
           </a>
