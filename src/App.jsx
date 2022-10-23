@@ -237,14 +237,14 @@ class App extends Component {
         <ul className="navbar-nav">
           <li className="nav-item active">
             {
-              <button type="button" className="nav-button">
-                <a
-                  href="https://mentalhealth.gatech.edu/about/scheduling-appointment"
-                  style={{ color: "black" }}
-                >
+              <a
+                href="https://mentalhealth.gatech.edu/about/scheduling-appointment"
+                style={{ color: "black" }}
+              >
+                <button type="button" className="nav-button">
                   See CARE
-                </a>
-              </button>
+                </button>
+              </a>
             }
           </li>
         </ul>
@@ -369,14 +369,14 @@ class App extends Component {
           {/* <a href="https://mentalhealth.gatech.edu/about/scheduling-appointment">
             Click here if you still would like to see CARE.
           </a> */}
-          <button type="button" className="nav-button">
-            <a
-              href="https://mentalhealth.gatech.edu/about/scheduling-appointment"
-              style={{ color: "white" }}
-            >
+          <a
+            href="https://mentalhealth.gatech.edu/about/scheduling-appointment"
+            style={{ color: "white" }}
+          >
+            <button type="button" className="nav-button">
               See CARE
-            </a>
-          </button>
+            </button>
+          </a>
         </div>
       );
     } else {
@@ -399,14 +399,19 @@ class App extends Component {
           information is collected on the form.
         </h4>
         <br></br>
-        <button type="button" className="nav-button" style={{ width: "100%" }}>
-          <a
-            href="https://mentalhealth.gatech.edu/about/scheduling-appointment"
-            style={{ color: "white" }}
+        <a
+          href="https://mentalhealth.gatech.edu/about/scheduling-appointment"
+          style={{ color: "white" }}
+        >
+          <button
+            type="button"
+            className="nav-button"
+            style={{ width: "100%" }}
           >
             See CARE
-          </a>
-        </button>
+          </button>
+        </a>
+
         <br></br>
         <br></br>
         <h5>Please answer the following questions:</h5>
