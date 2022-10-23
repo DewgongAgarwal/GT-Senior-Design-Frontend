@@ -5,7 +5,7 @@ import Select from "react-select";
 import { questions, choices, numberOfQuestions, arms } from "./constants.js";
 import "./App.css";
 import { Navbar, NavItem, Nav } from "react-bootstrap";
-axios.defaults.baseURL = 'https://www.mental-health-sd.com';
+axios.defaults.baseURL = "https://www.mental-health-sd.com";
 // axios.defaults.baseURL = 'http://localhost:8000';
 class App extends Component {
   constructor() {
@@ -63,7 +63,7 @@ class App extends Component {
     }
 
     if (total) {
-      this.setState({total: total});
+      this.setState({ total: total });
     }
 
     this.setCookie("message", "");
@@ -81,7 +81,8 @@ class App extends Component {
     const d = new Date();
     d.setTime(d.getTime() + 16 * 60 * 1000);
     let expires = "expires=" + d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";domain=.mental-health-sd.com";
+    document.cookie =
+      cname + "=" + cvalue + ";" + expires + ";domain=.mental-health-sd.com";
     // document.cookie = cname + "=" + cvalue + ";" + expires;
   };
 
@@ -106,8 +107,8 @@ class App extends Component {
   onSubmit = async (e) => {
     e.preventDefault();
 
-    this.setState({ fetching: true});
-    
+    this.setState({ fetching: true });
+
     const response = await axios.post("/get_response", {
       answers: this.state.answers,
     });
@@ -128,7 +129,10 @@ class App extends Component {
         alert(response.data.message);
       }
       if (response.data.message == "Submitted") {
-        localStorage.setItem('counter', parseInt(localStorage.getItem('counter')) + 1);
+        localStorage.setItem(
+          "counter",
+          parseInt(localStorage.getItem("counter")) + 1
+        );
         location.reload();
       }
     }
@@ -226,11 +230,24 @@ class App extends Component {
           aria-controls="navbarNav"
           aria-expanded="false"
           aria-label="Toggle navigation"
-        >
-        </button>
-          <ul className="navbar-nav">
-            <li className="nav-item active">{this.returnButton()}</li>
-          </ul>
+        ></button>
+        <ul className="navbar-nav">
+          <li className="nav-item active">{this.returnButton()}</li>
+        </ul>
+        <ul className="navbar-nav">
+          <li className="nav-item active">
+            {
+              <button type="button" className="nav-button">
+                <a
+                  href="https://mentalhealth.gatech.edu/about/scheduling-appointment"
+                  style={{ color: "black" }}
+                >
+                  See CARE
+                </a>
+              </button>
+            }
+          </li>
+        </ul>
       </nav>
     );
   };
@@ -247,9 +264,9 @@ class App extends Component {
               onChange={this.onRadioChange}
               type="radio"
               name={question}
-              id= "inline"
+              id="inline"
               value={String(i)}
-              style={{"height":48, "width":48}}
+              style={{ height: 48, width: 48 }}
             ></input>
             <label className="form-check-label" htmlFor="inline">
               {q}
@@ -278,15 +295,21 @@ class App extends Component {
   };
 
   colorGiver = (e) => {
-    switch(e) {
-      case 4: return 'green';
-      case 3: return 'yellowgreen';
-      case 2: return 'orange';
-      case 1: return 'darkgoldenrod';
-      case 0: return 'red';
-      default: return 'blue';
+    switch (e) {
+      case 4:
+        return "green";
+      case 3:
+        return "yellowgreen";
+      case 2:
+        return "orange";
+      case 1:
+        return "darkgoldenrod";
+      case 0:
+        return "red";
+      default:
+        return "blue";
     }
-  }
+  };
 
   valPage = () => {
     if (this.state.questions) {
@@ -294,27 +317,35 @@ class App extends Component {
       const options = arms.map((a, i) => ({ value: a, label: a }));
       return (
         <div className="homePageForm">
-          <h3>Case {localStorage.getItem('counter')} / {this.state.total}</h3><br></br>
-        <h3>Case Number {this.state.id}</h3><br></br>
-        <form onSubmit={this.onValidationSubmit} >
-          {answers.map((a, i) => (
-            <div>
-              {questions[i]}<br></br>
-              <p style= {{color: this.colorGiver(parseInt(a))}}>{choices[parseInt(a)]}</p>
-            </div>
-          ))}
-          <hr></hr>
-          <label>Your Recommendation: </label>
-          <Select className = "SelectList"
-            defaultValue={options[0]}
-            onChange={this.handleInputChange}
-            options={options}
-          ></Select>
+          <h3>
+            Case {localStorage.getItem("counter")} / {this.state.total}
+          </h3>
           <br></br>
-          <button type="submit">Submit</button>
+          <h3>Case Number {this.state.id}</h3>
           <br></br>
-          <br></br>
-        </form>
+          <form onSubmit={this.onValidationSubmit}>
+            {answers.map((a, i) => (
+              <div>
+                {questions[i]}
+                <br></br>
+                <p style={{ color: this.colorGiver(parseInt(a)) }}>
+                  {choices[parseInt(a)]}
+                </p>
+              </div>
+            ))}
+            <hr></hr>
+            <label>Your Recommendation: </label>
+            <Select
+              className="SelectList"
+              defaultValue={options[0]}
+              onChange={this.handleInputChange}
+              options={options}
+            ></Select>
+            <br></br>
+            <button type="submit">Submit</button>
+            <br></br>
+            <br></br>
+          </form>
         </div>
       );
     } else {
@@ -324,14 +355,28 @@ class App extends Component {
 
   homePageHelper = () => {
     if (this.state.prediction) {
+      alert(
+        "Based on your last form submission this resources might be helpful" +
+          ": " +
+          this.state.prediction
+      );
       return (
         <div>
           <br></br>
           Based on your last form submission this resources might be helpful:{" "}
           {this.state.prediction}
           <br></br>
-          <a href="https://mentalhealth.gatech.edu/about/scheduling-appointment">Click here if you still would like to see CARE.</a>
-
+          {/* <a href="https://mentalhealth.gatech.edu/about/scheduling-appointment">
+            Click here if you still would like to see CARE.
+          </a> */}
+          <button type="button" className="nav-button">
+            <a
+              href="https://mentalhealth.gatech.edu/about/scheduling-appointment"
+              style={{ color: "white" }}
+            >
+              See CARE
+            </a>
+          </button>
         </div>
       );
     } else {
@@ -348,17 +393,24 @@ class App extends Component {
           may best cater to your needs based on your responses.
         </h5>
         <br></br>
-        <h4>This form should not be used as a diagnosis tool. Its purpose is to
-          give personalized resources based on responses. No identifying information
-          is collected on the form.
+        <h4>
+          This form should not be used as a diagnosis tool. Its purpose is to
+          give personalized resources based on responses. No identifying
+          information is collected on the form.
         </h4>
-        <br>
-        </br>
-        <h5>
-          Please answer the following questions:
-        </h5>
-        <br>
-        </br>
+        <br></br>
+        <button type="button" className="nav-button" style={{ width: "100%" }}>
+          <a
+            href="https://mentalhealth.gatech.edu/about/scheduling-appointment"
+            style={{ color: "white" }}
+          >
+            See CARE
+          </a>
+        </button>
+        <br></br>
+        <br></br>
+        <h5>Please answer the following questions:</h5>
+        <br></br>
         <form onSubmit={this.onSubmit}>
           {questions.map((q, i) => (
             <div>
@@ -376,8 +428,10 @@ class App extends Component {
           >
             Submit
           </button>
-          <div className="loading-spinner" style={{display: this.state.fetching ? 'block' : 'none'}}>
-          </div>
+          <div
+            className="loading-spinner"
+            style={{ display: this.state.fetching ? "block" : "none" }}
+          ></div>
         </form>
         {this.homePageHelper()}
       </div>
@@ -398,9 +452,12 @@ class App extends Component {
       <div className="App">
         {this.navBar()}
         {this.renderSwitch()}
-        <br></br><br></br><br></br><br></br><br></br>
-        <nav className="navbar fixed-bottom navbar-GTblue">
-        </nav>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <nav className="navbar fixed-bottom navbar-GTblue"></nav>
       </div>
     );
   }
