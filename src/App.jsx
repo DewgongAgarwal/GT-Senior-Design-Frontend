@@ -20,6 +20,7 @@ class App extends Component {
       prediction: "",
       total: 0,
       fetching: false,
+      checked: false,
     };
     this.onRadioChange = this.onRadioChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -105,6 +106,7 @@ class App extends Component {
   };
 
   onSubmit = async (e) => {
+    
     e.preventDefault();
 
     this.setState({ fetching: true });
@@ -365,7 +367,8 @@ class App extends Component {
           <br></br>
           Based on your last form submission this resources might be helpful:{" "}
           {this.state.prediction}
-          <br></br><br></br>
+          <br></br>
+          <br></br>
           {/* <a href="https://mentalhealth.gatech.edu/about/scheduling-appointment">
             Click here if you still would like to see CARE.
           </a> */}
@@ -373,7 +376,11 @@ class App extends Component {
             href="https://mentalhealth.gatech.edu/about/scheduling-appointment"
             style={{ color: "white" }}
           >
-            <button type="button" className="nav-button" style={{ width: "100%" }}>
+            <button
+              type="button"
+              className="nav-button"
+              style={{ width: "100%" }}
+            >
               See CARE
             </button>
           </a>
@@ -383,6 +390,12 @@ class App extends Component {
       return;
     }
   };
+
+  acceptConditions = () => { 
+    
+    this.setState({checked: !this.state.checked}); 
+    
+  }; 
 
   homePage = () => {
     return (
@@ -424,11 +437,17 @@ class App extends Component {
             </div>
           ))}
 
+          <div><input type="checkbox" name="checkAddress" onClick={this.acceptConditions}/>
+          &nbsp;I acknowledge that the above information will be used to provide 
+          recommendations and any decision made based on this recommendation will 
+          be at the my own discretion.</div>
+
           <button
             type="submit"
             disabled={
               Object.keys(this.state.answers).length != numberOfQuestions ||
-              this.state.fetching
+              this.state.fetching ||
+              !this.state.checked
             }
           >
             Submit
