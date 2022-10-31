@@ -30,7 +30,7 @@
     "Do you need to talk to a dean about academic issues ?"
   ];
 
-  const choices = ["Never", "Rarely", "Occassionally", "Frequently", "Usually"];
+  const choices = ["Never", "Rarely", "Occasionally", "Frequently", "Usually"];
   const numberOfQuestions = questions.length;
 
   const arms = ["Academic Services", "Career Exploration and Coaching", "Wellness Enhancement Opportunities",

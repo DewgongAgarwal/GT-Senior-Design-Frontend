@@ -401,7 +401,7 @@ class App extends Component {
     return (
       <div className="homePageForm">
         <h5>
-          GT offers several health initiatives to serve its students. The
+          GT offers several programs and services to serve its students. The
           purpose of this questionnaire is to help determine the services that
           may best cater to your needs based on your responses.
         </h5>
