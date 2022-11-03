@@ -106,7 +106,6 @@ class App extends Component {
   };
 
   onSubmit = async (e) => {
-    
     e.preventDefault();
 
     this.setState({ fetching: true });
@@ -391,24 +390,22 @@ class App extends Component {
     }
   };
 
-  acceptConditions = () => { 
-    
-    this.setState({checked: !this.state.checked}); 
-    
-  }; 
+  acceptConditions = () => {
+    this.setState({ checked: !this.state.checked });
+  };
 
   homePage = () => {
     return (
       <div className="homePageForm">
         <h5>
-          GT offers several programs and services to serve its students. The
-          purpose of this questionnaire is to help determine the services that
-          may best cater to your needs based on your responses.
+          GT offers several programs and services to help meet your needs. This
+          questionnaire will help you determine which services may best assist
+          you.
         </h5>
         <br></br>
         <h4>
-          This form should not be used as a diagnosis tool. Its purpose is to
-          give personalized resources based on responses. No identifying
+          This form should not be used as a diagnostic tool. Its purpose is to
+          give personalized resources based on your responses. No identifying
           information is collected on the form.
         </h4>
         <br></br>
@@ -437,10 +434,16 @@ class App extends Component {
             </div>
           ))}
 
-          <div><input type="checkbox" name="checkAddress" onClick={this.acceptConditions}/>
-          &nbsp;I acknowledge that the above information will be used to provide 
-          recommendations and any decision made based on this recommendation will 
-          be at the my own discretion.</div>
+          <div>
+            <input
+              type="checkbox"
+              name="checkAddress"
+              onClick={this.acceptConditions}
+            />
+            &nbsp;I acknowledge that the above information will be used to
+            provide recommendations and any decisions made based on these
+            recommendations will be taken at my own discretion.
+          </div>
 
           <button
             type="submit"
