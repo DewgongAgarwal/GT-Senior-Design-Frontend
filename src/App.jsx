@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import jwt from "jwt-decode";
 import axios from "axios";
 import Select from "react-select";
-import { questions, choices, numberOfQuestions, arms } from "./constants.js";
+import { questions, questions2, choices, numberOfQuestions, numberOfQuestions2, arms } from "./constants.js";
 import "./App.css";
 import { Navbar, NavItem, Nav } from "react-bootstrap";
 axios.defaults.baseURL = "https://www.mental-health-sd.com";
@@ -19,6 +19,7 @@ class App extends Component {
       actual: "",
       prediction: "",
       total: 0,
+      preventive: false,
       fetching: false,
       checked: false,
     };
@@ -217,6 +218,10 @@ class App extends Component {
     }
   };
 
+  toggleForm = () => {
+    this.setState({ preventive: !this.state.preventive });
+  }
+
   navBar = () => {
     return (
       <nav className="navbar sticky-top navbar-expand-lg navbar-custom">
@@ -247,6 +252,11 @@ class App extends Component {
                 </button>
               </a>
             }
+          </li>
+          <li className="nav-item active">
+              <button type="button" className="nav-button" onClick={this.toggleForm}>
+                {this.state.preventive ? "Preventive Form" : "Diagnostic Form"}
+              </button>
           </li>
         </ul>
       </nav>
@@ -327,7 +337,7 @@ class App extends Component {
           <form onSubmit={this.onValidationSubmit}>
             {answers.map((a, i) => (
               <div>
-                {questions[i]}
+                {this.state.preventive ? questions2[i] : questions[i]}
                 <br></br>
                 <p style={{ color: this.colorGiver(parseInt(a)) }}>
                   {choices[parseInt(a)]}
@@ -427,7 +437,7 @@ class App extends Component {
         <h5>Please answer the following questions:</h5>
         <br></br>
         <form onSubmit={this.onSubmit}>
-          {questions.map((q, i) => (
+          {(this.state.preventive ? questions2 : questions).map((q, i) => (
             <div>
               {this.QAComponent(`${i + 1}. ${q}`, choices)}
               <br></br>
@@ -448,7 +458,7 @@ class App extends Component {
           <button
             type="submit"
             disabled={
-              Object.keys(this.state.answers).length != numberOfQuestions ||
+              Object.keys(this.state.answers).length != (this.state.preventive ? numberOfQuestions2 : numberOfQuestions) ||
               this.state.fetching ||
               !this.state.checked
             }
