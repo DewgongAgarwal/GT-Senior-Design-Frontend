@@ -253,11 +253,6 @@ class App extends Component {
               </a>
             }
           </li>
-          <li className="nav-item active">
-              <button type="button" className="nav-button" onClick={this.toggleForm}>
-                {this.state.preventive ? "Preventive Form" : "Diagnostic Form"}
-              </button>
-          </li>
         </ul>
       </nav>
     );
